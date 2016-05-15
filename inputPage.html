@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>BGMMaker</title>
+	<link rel="stylesheet" type="text/css" href="looknice.css">
+</head>
+<body background="140983-Burbon.jpg">
+		<div id="container">
+			<div id="optionsContainer" align="center">
+				<br><br><br><br><br>
+				<font id="tempoVal" color="white">Tempo (bpm)</font> <br><input type="range" min="40" max="200" id="tempo" oninput="tempoVal.innerHTML = 'Tempo (bpm): '+tempo.value"></input><br><br>
+				<font id="numVal" color="white">Number of generated notes</font> <br><input type="range" min="1" max="100" id="numNotes" oninput="numVal.innerHTML = 'Number of generated notes: '+numNotes.value"></input><br><br>
+				<font id="octaveVal" color="white">Octave</font> <br><input type="range" min="1" max="6" id="octave" oninput="octaveVal.innerHTML = 'Octave: '+octave.value"></input><br><br>
+				<font id="raagaVal" color="white">Raaga </font><select id="raagaChosen">
+					<option value="0">Mohanam</option>
+					<option value="1">Shankarabaranam</option>
+					<option value="2">Hamsadhwani</option>
+				</select><br><br>
+				<label class="custom-file-upload">
+				    <input type="file" id="fileName" />
+				    Upload Sample
+				</label><br>
+			</div>
+			<div id="nameContainer" align="center">
+				<br>
+				<p id="bigHeading"><font color="#ffffff" size="40">Music generator</font></p>
+				<p id="subHeading"><font color="#666c75" id="subFont" size="5">Click to specify parameters</font></p>
+			</div>
+			<div id="audioContainer" align="center"><p><font id="genTracks" size="5" color="black">Generated tracks</font></p><br><br><audio id="myAudio" src="final_output2.wav" controls="controls" loop="true"></audio></div>
+		</div>
+
+		<script type="text/javascript">
+
+			audioContainer.style.display = 'none';
+			var outFileName = "";
+
+			var mcDiv = document.getElementById('nameContainer');
+			mcDiv.addEventListener('click', function(e) {
+				mcDiv.style.height = "10vh";
+				mcDiv.style.transition = "height 0.5s ease-out";
+				bigHeading.style.display = "none";
+				mcDiv.style.borderBottomLeftRadius = "0";
+				mcDiv.style.borderBottomRightRadius = "0";
+				bigHeading.style.transition = "display 0.5s ease-out";
+				subHeading.style.top = "10%";
+				subFont.innerHTML = "Please specify parameters";
+				subFont.color = "#000000";
+				subHeading.style.transition = "top 0.5s ease-out";
+				subHeading.style.textShadow = "0 0 3px rgba(255,255,255,1) , 0 0 5px rgba(255,255,255,1) , 0 0 8px rgba(255,255,255,1) , 0 0 10px #00ffff , 0 0 13px #00ffff" ;
+			});
+
+			function readFile(file) {                                                       
+			    var reader = new FileReader();
+			    reader.onload = readSuccess;                                            
+			    function readSuccess(evt) { 
+			        // alert(evt.target.result);       
+			        var passFile = evt.target.result;
+			        var xhr = new XMLHttpRequest();
+					xhr.open( 'post', 'savedata.php', true );    
+					//Need to put together data
+					var data = 'tempo:' + tempo.value + '\nraaga:' + raagaChosen.value + '\nnumNotes:' + numNotes.value + '\noctave:' + octave.value + '\nlearnfile:' + passFile /*Implement this properly*/ ;
+					alert(raagaChosen.value); 
+					var sendData = new FormData();
+					sendData.append('data', data);
+					// alert(sendData);
+					xhr.send(sendData);
+					xhr.onreadystatechange=function() {
+						if(xhr.readyState==4 && xhr.status==200) {
+							console.log(typeof(xhr.responseText));
+							if (audioContainer.style.display == 'none') {
+						    	optionsContainer.style.left = "5%";
+						    	nameContainer.style.left = "5%";
+						    	audioContainer.style.display = 'inline';
+						    	optionsContainer.style.transition = "left 1s ease-in-out";
+						    	nameContainer.style.transition = "left 1s ease-in-out";
+						    	audioContainer.style.transition = "display 10s ease-in-out";
+						    	genTracks.style.textShadow = "0 0 3px rgba(255,255,255,1) , 0 0 5px rgba(255,255,255,1) , 0 0 8px rgba(255,255,255,1) , 0 0 10px #00ffff , 0 0 13px #00ffff" ;
+						    }     
+						    console.log(xhr.responseText);
+
+						  	myAudio.load();
+							
+						}
+					}
+
+			    };
+			    reader.readAsText(file);   
+
+			    
+
+			} 
+
+
+			document.getElementById('fileName').addEventListener('change', function(e) {
+				console.log(e.target.value);
+			    readFile(e.srcElement.files[0]);
+			    e.target.value = "";
+			});
+			
+		</script>
+
+</body>
+</html>

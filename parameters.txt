@@ -1,0 +1,6 @@
+tempo:196
+raaga:2
+numNotes:74
+octave:4
+learnfile:G2 , G2 , R2 , R2 , S n2 p , R2 , n2 R2 , S n2 S R2 ||
+G2 S R2 G2 R2 , R2 , S n2 p , R2 , n2 R2 , S n2 S R2
