@@ -1,14 +1,8 @@
-This program is a markov chain based music generator in the Mohanam Raga.
-Please see the github [pages](spranesh.github.io/mcmg) for this project for
-more.
+This program generates music automatically using Markov Model for sequencing swaras. 
 
-The simplest way of running the program is by
+Currently supports three ragas:
+1. Mohanam
+2. Shankarabaranam
+3. Hamsadhwani
 
-    $ python main.py pieces/*
-
-The default result will be stored in <tt>score_output.txt</tt>.
-The program takes various commandline options. Try
-
-    $ python main.py -h
-
-for a listing of all the option
+Notations: s, r1, r2, g1, g2, m1, m2, p, d1, d2, n1, n2.
